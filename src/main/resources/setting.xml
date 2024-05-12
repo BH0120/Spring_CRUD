@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+>
+
+    <context:component-scan base-package="com.example.demo"/>
+    <!--    <context:annotation-config></context:annotation-config>-->
+
+    <!-- bean definitions here -->
+    <!--    <bean id="hm" class="com.example.demo.HMWheel"></bean>-->
+    <!--    <bean id="bmw" class="com.example.demo.BMWWheel"></bean>-->
+
+    <!--    <bean id="frame" class="com.example.demo.CarFrame">-->
+    <!--        <property name="wheel" ref="bmw" />-->
+    <!--        <property name="color" value="100"/>-->
+    <!--    </bean>-->
+
+    <!--    <bean id="car" class="com.example.demo.Car">-->
+    <!--<property name="frame" ref="frame"/>-->
+    <!--    </bean>-->
+
+</beans>

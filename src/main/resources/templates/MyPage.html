@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!-- 타임리프를 사용하기 위한 태그 선언 -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- 내부 css -->
+    <style>
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
+        .button {
+            margin: 1em 0;
+            padding: .2em 3em;
+            width: 3rem;
+            display: block;
+            background-color: #04BEBD;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: .8em;
+            border-radius: 0;
+            -webkit-box-shadow: 0px 0px 37px -9px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 0px 37px -9px rgba(0,0,0,0.75);
+            box-shadow: 0px 0px 37px -9px rgba(0,0,0,0.75);
+        }
+        .form-wrap form .button:hover {
+            background-color: #04B5B5;
+        }
+
+    </style>
+
+    <!-- 내부 js -->
+    <script>
+        window.onload = function() {
+            console.log("");
+            console.log("[window onload] : [start]");
+            console.log("");
+        };
+    </script>
+
+</head>
+
+<body>
+
+<!-- 테이블 선언 실시 -->
+<table>
+
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>나이</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <!-- tr th:each : 행 반복문을 수행하겠다는 의미입니다 [여러 데이터 출력] -->
+    <tr th:each="list : ${tableList}">
+        <td><span th:text="${list.id}"></span></td>
+        <td><span th:text="${list.UserName}"></span></td>
+        <td><span th:text="${list.UserAge}"></span></td>
+    </tr>
+    </tbody>
+</table>
+<a href="LogOUT" class="button">Logout</a>
+<a href="ChangePWD"><span>Change PW</span></a>
+
+</body>
+
+</html>
