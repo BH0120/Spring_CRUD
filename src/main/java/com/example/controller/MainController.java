@@ -1,21 +1,16 @@
 package com.example.controller;
 
+import com.example.dto.DTOBoard;
 import com.example.dto.DTOUser;
 
-import com.example.entity.EntityUser;
 
-
-import com.example.repository.UserRepository;
+import com.example.service.ServiceBoard;
 import com.example.service.ServiceUser;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @Controller
@@ -23,6 +18,9 @@ public class MainController {
 
     @Autowired
     ServiceUser _serviceUser;
+
+    @Autowired
+    ServiceBoard _serviceBoard;
 
 //    @GetMapping("hello")
 //    public String Hello(Model m) {
@@ -96,6 +94,18 @@ public class MainController {
     }
 
 
+    //Query미사용 save방식사용 업데이트
+    @GetMapping("PassChange/{id}/{pass}/{rePass}")
+    public String userPassChange(
+            @PathVariable String id,
+            @PathVariable String pass,
+            @PathVariable String rePass)
+    {
+        _serviceUser.RePass(id, pass, rePass);
+        return "Login";
+    }
+
+
     @PostMapping("/Register")
     public String userRegister(DTOUser user, HttpSession session) {
 
@@ -109,7 +119,7 @@ public class MainController {
 
         if(session.getAttribute("LoginOK") == "Already"){
             m.addAttribute("tableList", _serviceUser.GetAllUser());
-            return "MyPage";
+            return "write";
 
         } else {
 
@@ -140,7 +150,35 @@ public class MainController {
             System.out.println("--------------FAIL UPDATE---------------");
             return "Update";
         }
+
     }
+
+    @GetMapping("/write")
+    public String writeBoard(HttpSession session, Model m) {
+        if(session.getAttribute("LoginOK") == "Already") {
+            return "write";
+        }else {
+            session.invalidate();
+            return "Login";
+        }
+    }
+
+    @PostMapping("/writeBoard")
+    public String userWriteBoard(DTOBoard board, Model m, HttpSession session) {
+        _serviceBoard.Write(board);
+        m.addAttribute("boardList", _serviceBoard.GetAllBoard());
+        return "Board";
+    }
+
+    @GetMapping("/userQuit/{id}/{pass}")
+    public String userQuit(@PathVariable String id, @PathVariable String pass, HttpSession session) {
+        _serviceUser.Quit(id,pass);
+        session.invalidate();
+        return "Login";
+    }
+
+
+
 //
 //
 //

@@ -1,6 +1,8 @@
 package com.example.service;
 
+import com.example.dto.DTOBoard;
 import com.example.dto.DTOUser;
+import com.example.entity.EntityBoard;
 import com.example.entity.EntityUser;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ public class ServiceUser {
 
     @Autowired
     UserRepository userRepo;
+
 
     public void Join(DTOUser user) {
 
@@ -33,6 +36,9 @@ public class ServiceUser {
             return true;
         }
     }
+
+
+
 
     public boolean UpdatePWD(DTOUser user,String newPwd) {
 
@@ -57,8 +63,29 @@ public class ServiceUser {
             //업데이트 행의 수가 0개일 경우
             return false;
         }
-
     }
+
+
+    public void RePass(
+            String id,
+            String pass,
+            String rePass)
+    {
+        List<EntityUser> list = userRepo.findByUsernameAndUserage(id, pass);
+        if (list.size() > 0) {
+            list.get(0).setUserAge(rePass);
+            userRepo.save(list.get(0));
+        }
+    }
+
+
+    public void Quit(String id, String pass){
+        List<EntityUser> list = userRepo.findByUsernameAndUserage(id, pass);
+        if (list.size() > 0) {
+            userRepo.delete(list.get(0));
+        }
+    }
+
 
     public Iterable<EntityUser> GetAllUser() {
         return userRepo.findAll();
