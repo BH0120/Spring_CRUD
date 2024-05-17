@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 public class EntityBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     int id;
+
     @Column
     String title;
 

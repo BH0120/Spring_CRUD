@@ -5,6 +5,7 @@ import com.example.dto.DTOUser;
 
 
 import com.example.entity.EntityBoard;
+import com.example.entity.EntityUser;
 import com.example.entity.StructBoardUser;
 import com.example.repository.BoardRepository;
 import com.example.service.ServiceBoard;
@@ -136,6 +137,7 @@ public class MainController {
 
             if (b) {
                 session.setAttribute("LoginOK", "Already");
+                session.setAttribute("CurrentUser", user.getUserName());
                 m.addAttribute("tableList", _serviceUser.GetAllUser());
                 return "MyPage";
             } else {
@@ -162,94 +164,89 @@ public class MainController {
 
     }
 
-    @GetMapping("/write/{userId}/{title}/{content}")
-    public String writeBoard(
-            @PathVariable String userId,
-            @PathVariable String title,
-            @PathVariable String content , Model m
-    )
+    @GetMapping("MyPageList")
+    public String MyPage(HttpSession session, Model m)
     {
-        bRepo.save(
-                new EntityBoard(-1,
-                        title,
-                        content,
-                        userId)
-                );
-        Iterable<EntityBoard> list = bRepo.findAll();
-        List<StructBoardUser> list2 = new ArrayList<>();
+        String CurrentUser = (String)session.getAttribute("CurrentUser");
 
-        for(EntityBoard eb : list){
+        if(CurrentUser == null)
+            return "Login";
+
+        Iterable<EntityBoard> list = bRepo.findAll();
+        List<StructBoardUser> list2 =  new ArrayList<>();
+
+        for(EntityBoard eb : list)
+        {
             StructBoardUser sbu = new StructBoardUser();
             sbu.board = eb;
 
-            if(eb.getUserId().equals("0")){
-                sbu.user = "<a href='/BoardEdit/"+eb.getId()+"/제목수정/내용수정'>수정</a> / <a href='/BoardDelete"+eb.getId()+"/제목수정/내용수정'>삭제</a>";
-            }else{
+
+            if(eb.getUserId().equals(CurrentUser))
+                sbu.user = "<a href='/BoardEdit/"+eb.getId()+"/제목수정/내용수정'>수정</a>/<a href='/BoardDelete/" +eb.getId()+ "/제목수정/내용수정'>삭제</a>";
+            else
                 sbu.user = "";
-            }
+
             list2.add(sbu);
         }
-        m.addAttribute("tableList", list2);
+
+        m.addAttribute("tableList" , list2);
 
         return "MyPage";
+    }
+
+
+
+
+
+    @GetMapping("/write/{title}/{content}")
+    public String writeBoard(
+            @PathVariable String title,
+            @PathVariable String content ,
+            Model m,
+            HttpSession session
+    )
+    {
+       String userId = (String)session.getAttribute("CurrentUser");
+       bRepo.save(
+               new EntityBoard(-1,title,content,userId)
+       );
+
+        return "redirect:/MyPageList";
     }
 
     @GetMapping("/BoardEdit/{boardId}/{title}/{content}")
     public String BoardEdit(
             @PathVariable int boardId,
             @PathVariable String title,
-            @PathVariable String content , Model m
+            @PathVariable String content , Model m, HttpSession session
     ){
-       EntityBoard eb1 = new EntityBoard(boardId, title ,content, "0");
+       String currentUser = (String)session.getAttribute("CurrentUser");
+
+       if(currentUser == null) return "Login";
+
+       EntityBoard eb1 = new EntityBoard(boardId, title ,content, currentUser);
+
 
        bRepo.save(eb1);
 
-       Iterable<EntityBoard> list = bRepo.findAll();
-       List<StructBoardUser> list2 = new ArrayList<>();
-
-       for(EntityBoard eb : list){
-           StructBoardUser sbu = new StructBoardUser();
-           sbu.board = eb;
-           if(eb.getUserId().equals("0")){
-               sbu.user= "<a href='/BoardEdit/"+eb.getId()+"/제목수정/내용수정'>수정</a> / <a href='/BoardDelete/"+ eb.getId()+"/제목수정/내용수정'>삭제</a>";
-           }else {
-               sbu.user = "";
-           }
-
-           list2.add(sbu);
-       }
-       m.addAttribute("tableList", list2);
-
-        return "MyPage";
+        return "redirect:/MyPageList";
     }
 
     @GetMapping("/BoardDelete/{boardId}/{title}/{content}")
     public String boardDelete(
             @PathVariable int boardId,
             @PathVariable String title,
-            @PathVariable String content , Model m
+            @PathVariable String content , Model m, HttpSession session
     ){
-        EntityBoard eb2 = new EntityBoard(boardId, title ,content, "0");
+        String CurrentUser = (String)session.getAttribute("CurrentUser");
+
+        if(CurrentUser == null) return "Login";
+
+        EntityBoard eb2 = new EntityBoard(boardId, title ,content, CurrentUser);
 
         bRepo.delete(eb2);
 
-        Iterable<EntityBoard> list = bRepo.findAll();
-        List<StructBoardUser> list2 = new ArrayList<>();
-
-        for(EntityBoard eb : list){
-            StructBoardUser sbu = new StructBoardUser();
-            sbu.board = eb;
-            if(eb.getUserId().equals("0")){
-                sbu.user= "<a href='/BoardEdit/"+eb.getId()+"/제목수정/내용수정'>수정</a> / <a href='/BoardDelete/"+ eb.getId() +"/제목수정/내용수정'>삭제</a>";
-            }else {
-                sbu.user = "";
-            }
-
-            list2.add(sbu);
-        }
-        m.addAttribute("tableList", list2);
-
-        return "MyPage";
+        return "redirect:/MyPageList";
     }
 
     @GetMapping("/userQuit/{id}/{pass}")
