@@ -16,13 +16,6 @@ public class ServiceBoard {
         return boardRepo.findAll();
     }
 
-    public void Write(DTOBoard board){
-        System.out.println("Service Board Write");
-        System.out.println(board.Title);
-        System.out.println(board.Author);
-        System.out.println(board.Content);
-        boardRepo.save(board.ToEntity());
-    }
 
 
 }

@@ -64,17 +64,23 @@
     <thead>
     <tr>
         <th>ID</th>
-        <th>이름</th>
-        <th>나이</th>
+        <th>제목</th>
+        <th>내용</th>
+        <th>작성자</th>
+        <th>수정/삭제</th>
     </tr>
     </thead>
 
     <tbody>
     <!-- tr th:each : 행 반복문을 수행하겠다는 의미입니다 [여러 데이터 출력] -->
     <tr th:each="list : ${tableList}">
-        <td><span th:text="${list.id}"></span></td>
-        <td><span th:text="${list.UserName}"></span></td>
-        <td><span th:text="${list.UserAge}"></span></td>
+        <td><span th:text="${list.board.id}"></span></td>
+        <td><span th:text="${list.board.title}"></span></td>
+        <td><span th:text="${list.board.content}"></span></td>
+        <td><span th:text="${list.board.userId}"></span></td>
+        <td><span th:utext="${list.user}"></span></td>
+
+
     </tr>
     </tbody>
 </table>

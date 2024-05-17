@@ -1,19 +1,20 @@
+
 package com.example.dto;
 
 
 import com.example.entity.EntityBoard;
 
 public class DTOBoard {
-
+/*
     public String Title;
-    public String Author;
+    public String UserId;
     public String Content;
     public String Date;
 
-    public DTOBoard(String title, String author,  String content, String date){
+    public DTOBoard(String title, String userId,  String content, String date){
         super();
         Title = title;
-        Author = author;
+        UserId = userId;
         Content = content;
         Date = date;
     }
@@ -42,25 +43,28 @@ public class DTOBoard {
         Date = date;
     }
 
-    public String getAuthor() {
-        return Author;
+    public String getUserId() {
+        return UserId;
     }
 
-    public void setAuthor(String author) {
-        Author = author;
+    public void setUserId(String userId) {
+        UserId = userId;
     }
 
     public EntityBoard ToEntity(){
-        return new EntityBoard(-1, Title, Author, Content, Date);
+        return new EntityBoard(-1, Title, UserId, Content, Date);
     }
 
     @Override
     public String toString() {
         return "DTOBoard {" +
                 "Title='" + Title + '\'' +
-                ", Author=" + Author + '\'' +
+                ", UserId=" + UserId + '\'' +
                 ", Content=" + Content + '\'' +
                 ", Date=" + Date + '\'' +
                 '}';
+
     }
+    */
 }
+
