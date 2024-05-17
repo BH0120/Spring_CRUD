@@ -16,6 +16,9 @@ public class EntityBoard {
     String author;
 
     @Column
+    String userId;
+
+    @Column
     String content;
 
     @Column

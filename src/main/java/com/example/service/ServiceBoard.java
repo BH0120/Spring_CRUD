@@ -24,5 +24,9 @@ public class ServiceBoard {
         boardRepo.save(board.ToEntity());
     }
 
+    public void Delete(DTOBoard board){
+        boardRepo.delete(board.ToEntity());
+    }
+
 
 }

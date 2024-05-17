@@ -12,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 @Controller
 public class MainController {
@@ -93,7 +96,6 @@ public class MainController {
         return "Login";
     }
 
-
     //Query미사용 save방식사용 업데이트
     @GetMapping("PassChange/{id}/{pass}/{rePass}")
     public String userPassChange(
@@ -127,8 +129,11 @@ public class MainController {
 
             if (b) {
                 session.setAttribute("LoginOK", "Already");
+                //session에 저장된 유저이름으로 글 작성시에 author에 해당 유저 이름으로 넣음
+                session.setAttribute("CurrentUser", user.getUserName());
+
                 m.addAttribute("tableList", _serviceUser.GetAllUser());
-                return "MyPage";
+                return "Board";
             } else {
                 return "Login";
             }
@@ -153,6 +158,8 @@ public class MainController {
 
     }
 
+
+
     @GetMapping("/write")
     public String writeBoard(HttpSession session, Model m) {
         if(session.getAttribute("LoginOK") == "Already") {
@@ -165,10 +172,21 @@ public class MainController {
 
     @PostMapping("/writeBoard")
     public String userWriteBoard(DTOBoard board, Model m, HttpSession session) {
+        board.setAuthor( (String) session.getAttribute("CurrentUser") );
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = now.format(formatter);
+
+        board.setDate(formattedDate);
+
         _serviceBoard.Write(board);
         m.addAttribute("boardList", _serviceBoard.GetAllBoard());
         return "Board";
     }
+
+
+
 
     @GetMapping("/userQuit/{id}/{pass}")
     public String userQuit(@PathVariable String id, @PathVariable String pass, HttpSession session) {
@@ -177,6 +195,14 @@ public class MainController {
         return "Login";
     }
 
+
+    //교수님 방식
+    @GetMapping("/proWrite/{userid}/{title}/{content}")
+    public String proWrite(@PathVariable String id, @PathVariable String pass, HttpSession session) {
+        _serviceUser.Quit(id,pass);
+        session.invalidate();
+        return "Login";
+    }
 
 
 //
